@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="reporteTitle">Reporte de Loot</title>
+    <link rel="stylesheet" href="style.css"> 
+    <script src="reporte.js" defer></script>
+    <style>
+        /* Estilos específicos para la ventana del reporte */
+        :root {
+            --color-texto: #e0e0e0;
+            --color-fondo: #1e1e1e;
+            --color-fondo-secundario: #2a2a2a;
+            --color-separador: #444;
+            --color-exito: #4CAF50; 
+            --color-error: #F44336; 
+            --color-info: #2196F3;
+            --color-acento-dorado: #FFC107; 
+        }
+        body { 
+            background-color: var(--color-fondo); 
+            color: var(--color-texto); 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            margin: 0; 
+        }
+        .report-container { max-width: 800px; margin: 0 auto; background-color: var(--color-fondo-secundario); padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .report-title { color: var(--color-acento-dorado); border-bottom: 2px solid var(--color-separador); padding-bottom: 10px; margin-bottom: 10px; text-align: center; }
+        .report-subtitle { color: var(--color-info); margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .summary-box { background-color: #333; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .copy-btn-ansi { background-color: #5865F2; color: white; border: none; padding: 12px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; margin-top: 25px; width: 100%; font-weight: bold; font-size: 1.2em; }
+        .referencia-visual { text-align: center; margin-top: 20px; padding: 15px; background-color: #222; border-radius: 5px;}
+        .referencia-visual img { max-width: 90%; height: auto; border-radius: 5px; margin-top: 10px; border: 1px solid var(--color-separador);}
+        .report-list { background-color: #333; padding: 10px; border-radius: 5px; max-height: 250px; overflow-y: auto; list-style: none; padding: 0; margin: 0;}
+        .report-list-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px dotted #333; font-size: 0.9em;}
+        /* Ajuste de anchos para acomodar texto más grande */
+        .report-player-name { font-weight: bold; width: 20%;} 
+        .report-cofre-num { width: 45%; text-align: left;} 
+        .report-check-btn { width: 8%; background-color: #333; padding: 5px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1em; border: 2px solid;} 
+        .report-cofre-status-btn { width: 25%; color: black; border: none; padding: 5px; border-radius: 3px; cursor: pointer; font-weight: bold; margin-left: 5px;} 
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <h1 class="report-title">✅ Reporte de Reparto de Loot</h1>
+        <p style="text-align: center; color: var(--color-exito); font-weight: bold; font-size: 0.9em;">(Esta vista es INTERACTIVA y actualiza el estado de los cofres en la aplicación principal.)</p>
+        
+        <h2 class="report-subtitle" id="reporteActivity"></h2>
+        
+        <p id="reparacionInfo"></p>
+
+        <div class="summary-box">
+            <p id="summaryTotales"></p>
+            <p id="summaryIndividual"></p>
+        </div>
+
+        <h2 class="report-subtitle">Estado de Cofres y Pago (Interactivo)</h2>
+        <div id="lista-detallada">
+            <ul class="report-list" id="participantesReporteList">
+                </ul>
+        </div>
+
+        <button class="copy-btn-ansi" onclick="copyDiscordANSI()">
+            📋 Copiar Reporte Elegante para Discord (ANSI)
+        </button>
+        
+        <div class="referencia-visual">
+            <h3>Referencia Visual de Cofres</h3>
+            <img src="cofres_referencia_unica.jpg" 
+                 alt="Distribución de cofres de gremio numerados" 
+                 onerror="this.onerror=null;this.src='placeholder.png';"
+                 style="max-width: 100%; height: auto; border-radius: 5px; margin-top: 10px; border: 1px solid var(--color-separador);">
+        </div>
+    </div>
+</body>
+</html>

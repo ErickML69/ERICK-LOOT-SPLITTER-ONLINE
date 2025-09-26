@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiyoko Loot Split</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- VARIABLES Y RESET GENERAL --- */
+        :root {
+            --color-texto: #e0e0e0;
+            --color-fondo: #1e1e1e;
+            --color-fondo-secundario: #2a2a2a;
+            --color-separador: #444;
+            --color-exito: #4CAF50;
+            --color-error: #F44336;
+            --color-info: #2196F3;
+            --color-cofre: #795548;
+            --color-acento-dorado: #FFC107;
+            --color-activo: var(--color-info); /* Color para botones activos */
+        }
+        body { 
+            background-color: var(--color-fondo); 
+            color: var(--color-texto); 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 5px auto; 
+            padding: 10px; 
+        }
+        h1, h2, h3, h4 { margin-top: 0; }
+        hr { border: 0; border-top: 1px solid var(--color-separador); margin: 10px 0; }
+        button { 
+            background-color: var(--color-info); 
+            color: white; 
+            border: none; 
+            padding: 7px 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+        }
+        button:hover { background-color: #1976D2; }
+        .eliminar-btn {
+            background-color: var(--color-error);
+            font-size: 0.7em;
+            padding: 2px 5px;
+            margin-left: 5px;
+        }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { display: block; margin-bottom: 3px; font-weight: bold; font-size: 0.9em; }
+
+        /* --- HEADER Y NAVEGACIÓN COMPACTA --- */
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 5px 0; 
+            border-bottom: 2px solid var(--color-separador);
+            margin-bottom: 10px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* --- CONTENIDO PRINCIPAL: DOBLE COLUMNA --- */
+        .main-content-split {
+            display: flex;
+            gap: 10px; 
+        }
+
+        .main-content-split > section {
+            flex: 1; 
+            min-width: 0;
+            padding: 10px; 
+            border-radius: 8px;
+            background-color: var(--color-fondo-secundario);
+            border: 1px solid var(--color-separador);
+            height: calc(100vh - 120px); 
+            overflow-y: hidden; 
+        }
+        .loot-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        .loot-inputs > div {
+            flex: 1;
+        }
+        
+        /* Contenedores con scroll para listas grandes */
+        #listaParticipantes, #resultados-content {
+            overflow-y: auto; 
+            max-height: calc(100% - 220px); 
+            padding-right: 5px;
+        }
+        #listaParticipantes {
+            list-style-type: none;
+            padding: 0;
+        }
+        #listaParticipantes li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px dashed #555;
+            font-size: 0.9em;
+        }
+        .checkbox-group label { margin-left: 3px; }
+        .cofre-tag {
+            background-color: var(--color-cofre);
+            color: white;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            margin: 0 5px;
+            font-weight: normal;
+        }
+
+        /* Resultados en Vivo dentro de la columna derecha */
+        #resultados {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            background-color: #333;
+        }
+        #resultados h4 { font-size: 1.1em; margin-bottom: 5px; }
+        #resultados p { font-size: 0.9em; margin: 3px 0; }
+
+        /* --- ESTILOS DE BOTONES DE ALTERNANCIA --- */
+        .toggle-group {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        .toggle-button {
+            flex: 1;
+            padding: 8px 10px;
+            background-color: #555;
+            border: 1px solid #666;
+            color: var(--color-texto);
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .toggle-button.active {
+            background-color: var(--color-activo);
+            color: white;
+            border-color: var(--color-activo);
+        }
+        .toggle-button:hover:not(.active) {
+            background-color: #777;
+        }
+        /* Ocultar los inputs de radio subyacentes */
+        .toggle-group input[type="radio"] {
+            display: none;
+        }
+
+        /* Estilo para las entradas de loot (para el botón de eliminar) */
+        .loot-entry {
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .delete-loot-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--color-error);
+            padding: 3px 6px;
+            border-radius: 3px;
+            line-height: 1;
+            font-size: 0.8em;
+            opacity: 0.8;
+            border: none;
+            cursor: pointer;
+        }
+        .delete-loot-btn:hover {
+            opacity: 1;
+        }
+        .loot-entry .entrada-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Estilo para la lista de ubicaciones */
+        #listaUbicacionesGuardadas li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px dashed #555;
+            font-size: 0.9em;
+        }
+        
+        /* Estilos para Modals */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8); 
+        }
+        .modal-content {
+            background-color: var(--color-fondo-secundario);
+            margin: 10% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 600px; 
+            border-radius: 8px;
+            position: relative; /* Necesario para posicionar la X */
+        }
+        .close {
+            color: var(--color-error);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute; /* Posicionar la X */
+            top: 5px;
+            right: 15px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+        .close:hover,
+        .close:focus {
+            color: #ff0000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* --- RESPONSIVE / PHONE MODE --- */
+        @media (max-width: 768px) {
+            .main-content-split {
+                flex-direction: column; 
+                gap: 5px;
+            }
+            .main-content-split > section {
+                height: auto; 
+                max-height: none; 
+            }
+            .participants-section, .loot-input-section {
+                height: 40vh; 
+                overflow-y: auto;
+            }
+            .loot-inputs {
+                flex-direction: column;
+                gap: 0;
+            }
+            .nav-buttons {
+                gap: 5px;
+            }
+            .nav-buttons button {
+                padding: 5px 8px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Hiyoko Loot Split</h1>
+            <div class="nav-buttons">
+                <div id="utc-clock" style="font-size: 0.9em;">UTC: 00:00:00</div>
+                <button onclick="openUbicacionModal()">📦 Ubicación</button>
+                <button onclick="abrirHistorialReportes()">📜 Historial</button>
+                <button onclick="toggleMode()" id="mode-icon">📱</button>
+            </div>
+        </header>
+
+        <div class="main-content-split">
+            
+            <section class="participants-section">
+                <h2>🧑‍🤝‍🧑 Participantes</h2>
+                <div class="input-group">
+                    <label for="nombreParticipante">Añadir Jugador:</label>
+                    <input type="text" id="nombreParticipante" list="lista-participantes" placeholder="Nombre del Jugador">
+                    <datalist id="lista-participantes"></datalist>
+                    <div style="display: flex; gap: 5px; margin-top: 5px;">
+                        <button onclick="agregarParticipante()" style="flex: 1;">Añadir</button>
+                        <button onclick="document.getElementById('bulkPasteModal').style.display='block'" style="flex: 1; background-color: #555;">
+                            📋 Pegado Masivo
+                        </button>
+                    </div>
+                </div>
+
+                <div id="lista-participantes-scroll">
+                    <ul id="listaParticipantes">
+                        <li>No hay participantes.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="loot-input-section">
+                <h2>💰 Datos de Loot y Reparto</h2>
+                
+                <label for="nombreCofre">Nombre del Cofre/Actividad:</label>
+                <input type="text" id="nombreCofre" placeholder="Ej: Cofre PvP 10/10" required>
+
+                <fieldset style="margin-top: 10px; padding: 5px 0; border: none;">
+                    <legend style="font-size: 0.9em; font-weight: bold;">Tipo de Cofre:</legend>
+                    <div class="toggle-group" id="toggleTipoCofre" onchange="generarReporteCompleto()">
+                        <input type="radio" id="tipoIsla" name="tipoCofre" value="ISLA" checked>
+                        <label for="tipoIsla" class="toggle-button active">ISLA</label>
+                        <input type="radio" id="tipoHo" name="tipoCofre" value="HO">
+                        <label for="tipoHo" class="toggle-button">HO</label>
+                    </div>
+                </fieldset>
+
+                <div id="resultados-content">
+                    
+                    <h3 style="margin-top: 10px;">Loot Ingresado</h3>
+                    <div id="entradasContainer">
+                        <div id="entrada-1" class="loot-entry">
+                            <div class="entrada-header">
+                                <h4 style="font-size: 1em;">Entrada 1</h4>
+                            </div>
+                            <div class="input-group loot-inputs">
+                                <div>
+                                    <label for="dineroEntrada1">Objetos:</label>
+                                    <input type="text" id="dineroEntrada1" value="0" oninput="formatearNumeroYActualizarLoot(this, 1, 'dinero')">
+                                </div>
+                                <div>
+                                    <label for="silverEntrada1">Silver:</label>
+                                    <input type="text" id="silverEntrada1" value="0" oninput="formatearNumeroYActualizarLoot(this, 1, 'silver')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="añadirOtraEntrada()" style="width: 100%; margin-bottom: 5px; padding: 5px;">+ Añadir Otra Entrada</button>
+                    
+                    <hr>
+
+                    <button onclick="toggleReparacionPanel()" id="btnToggleReparacion" style="width: 100%; margin-bottom: 10px; background-color: #6a6a6a;">
+                        🛠️ Aplicar Reparación (OFF)
+                    </button>
+
+                    <div id="reparacion-panel" style="display:none; padding: 10px; border: 1px dashed #555; border-radius: 5px;">
+                        <h3 style="font-size: 1em; margin-bottom: 5px;">Parámetros de Descuento</h3>
+                        
+                        <div class="input-group">
+                            <label for="costoReparacion">Costo Total:</label>
+                            <input type="text" id="costoReparacion" value="0" oninput="formatearNumero(this)">
+                        </div>
+                        
+                        <legend style="font-size: 0.9em; font-weight: bold; margin-top: 5px;">Tipo de Descuento:</legend>
+                        <div class="toggle-group" id="toggleTipoDescuento" onchange="generarReporteCompleto()">
+                            <input type="radio" id="descuentoSilver" name="descuentoReparacion" value="silver" checked>
+                            <label for="descuentoSilver" class="toggle-button active">Silver</label>
+                            <input type="radio" id="descuentoObjetos" name="descuentoReparacion" value="objetos">
+                            <label for="descuentoObjetos" class="toggle-button">Objetos</label>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <section id="resultados" class="results-section">
+                        <h4>Resultados en Vivo</h4>
+                        <p>Ingresa los datos para ver el reparto.</p>
+                    </section>
+                </div>
+            </section>
+        </div> <div class="final-actions-panel" style="justify-content: space-between; margin-top: 10px;">
+            <button onclick="guardarReporte()" style="background-color: var(--color-exito); flex: 2; font-weight: bold;">✅ Generar y Abrir Reporte</button>
+            <button onclick="resetearTodo()" style="background-color: var(--color-error); flex: 1;">🗑️ Resetear Todo</button>
+        </div>
+    </div>
+    
+    <div id="bulkPasteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('bulkPasteModal').style.display='none'">&times;</span>
+            <h2>📋 Pegado Masivo</h2>
+            <p>Pega la lista de jugadores, uno por línea.</p>
+            <textarea id="jugadoresBulk" rows="10" placeholder="Jugador1&#10;Jugador2&#10;..."></textarea>
+            <button onclick="procesarPegadoMasivo()">Añadir Jugadores</button>
+        </div>
+    </div>
+
+    <div id="ubicacionModal" class="modal">
+        <div class="modal-content modal-ubicacion">
+            <span class="close" onclick="closeUbicacionModal()">&times;</span>
+            <h2>📦 Gestión de Ubicaciones de Cofres</h2>
+
+            <div class="referencia-visual">
+                <p>Cargando imagen de referencia...</p>
+            </div>
+            
+            <hr>
+
+            <h3>💾 Registrar/Actualizar Ubicación</h3>
+            <div class="input-group" style="display: flex; gap: 10px; align-items: flex-end;">
+                <div>
+                    <label for="jugadorUbicacion">Jugador:</label>
+                    <input type="text" id="jugadorUbicacion" list="lista-participantes" placeholder="Nombre del jugador">
+                </div>
+                <div>
+                    <label for="numeroCofreUbicacion">Cofre #:</label>
+                    <input type="number" id="numeroCofreUbicacion" min="1" placeholder="Ej: 5" style="width: 80px;">
+                </div>
+                <button onclick="guardarUbicacionCofre()">Guardar</button>
+            </div>
+
+            <hr>
+
+            <h3>✅ Ubicaciones Guardadas (Cofre # / Jugador)</h3>
+            <ul id="listaUbicacionesGuardadas" style="list-style-type: none; padding: 0;">
+                <li>No hay ubicaciones registradas.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

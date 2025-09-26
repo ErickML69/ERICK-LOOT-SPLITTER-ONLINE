@@ -1,0 +1,486 @@
+/* ========================================================== */
+/* VARIABLES DE COLOR (Negro y Dorado) */
+/* ========================================================== */
+:root {
+    --color-texto: #e0e0e0;
+    --color-fondo: #1e1e1e;
+    --color-fondo-secundario: #2a2a2a;
+    --color-separador: #444;
+    --color-acento-dorado: #FFC107; /* Dorado */
+    --color-exito: #4CAF50; /* Verde */
+    --color-error: #F44336; /* Rojo */
+    --color-info: #2196F3; /* Azul */
+    --color-acento-claro: #4CAF50; 
+}
+
+/* ========================================================== */
+/* ESTILOS GENERALES Y LAYOUT */
+/* ========================================================== */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-acento-dorado);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.title {
+    color: var(--color-acento-dorado);
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.utc-clock {
+    font-size: 0.9em;
+    color: #999;
+}
+
+.main-grid {
+    display: grid;
+    gap: 20px;
+}
+
+/* Modo PC: Dos Columnas */
+.pc-mode .main-grid {
+    grid-template-columns: 2fr 1fr;
+}
+
+/* Modo Móvil: Una Columna */
+.phone-mode .main-grid {
+    grid-template-columns: 1fr;
+}
+
+.left-column, .right-column {
+    background-color: var(--color-fondo-secundario);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-separador);
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.section-header h2 {
+    color: var(--color-acento-dorado);
+    font-size: 1.3em;
+}
+
+/* ========================================================== */
+/* ESTILOS DE INPUTS Y FORMULARIO (Estéticos) */
+/* ========================================================== */
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: var(--color-texto);
+}
+
+/* Estilo Base para todos los inputs de texto y número y textareas */
+input[type="text"],
+input[type="number"],
+input[type="search"],
+textarea {
+    background-color: #333; 
+    color: var(--color-texto); 
+    border: 1px solid var(--color-separador); 
+    padding: 10px 12px; 
+    border-radius: 5px; 
+    width: 100%; 
+    transition: all 0.3s ease;
+    font-size: 1em;
+    outline: none;
+    box-sizing: border-box; 
+}
+
+/* Estilo de Foco (Dorado) */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+textarea:focus {
+    border-color: var(--color-acento-dorado); 
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.5); 
+    background-color: #3a3a3a; 
+}
+
+/* Estilo para el input del nombre de cofre para destacarlo (Dorado) */
+#nombreCofre {
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: center;
+    border-width: 2px;
+    border-color: var(--color-acento-dorado); 
+}
+#nombreCofre:focus {
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.7); 
+}
+
+/* ========================================================== */
+/* BOTONES Y TOGGLES */
+/* ========================================================== */
+
+button {
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    font-weight: 600;
+}
+
+.control-btn {
+    background-color: #3a3a3a;
+    color: var(--color-texto);
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+.control-btn:hover {
+    background-color: #555;
+    box-shadow: 0 0 5px var(--color-separador);
+}
+
+.btn-primary {
+    background-color: var(--color-info); 
+    color: white;
+    padding: 12px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 100%;
+}
+.btn-primary:hover {
+    background-color: #1a71b8;
+}
+
+.btn-secondary {
+    background-color: #6a6a6a;
+    color: white;
+    padding: 12px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 100%;
+}
+.btn-secondary:hover {
+    background-color: #888;
+}
+
+.action-buttons button {
+    margin-bottom: 10px;
+}
+
+.toggle-group input[type="radio"] {
+    display: none;
+}
+
+.toggle-button {
+    padding: 8px 15px;
+    border: 1px solid var(--color-separador);
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #333;
+    color: #aaa;
+    transition: background-color 0.2s;
+}
+
+.toggle-button.active {
+    background-color: var(--color-acento-dorado);
+    color: black;
+    border-color: var(--color-acento-dorado);
+    font-weight: bold;
+}
+
+.toggle-group {
+    display: flex;
+    gap: 5px;
+}
+.toggle-group-container {
+    margin-bottom: 15px;
+}
+
+/* Estilo para el botón de Reparación ON/OFF */
+#btnToggleReparacion {
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    transition: background-color 0.3s;
+    background-color: #6a6a6a; /* Default OFF */
+}
+
+/* ========================================================== */
+/* LISTAS Y PARTICIPANTES */
+/* ========================================================== */
+.participants-list-container {
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #333;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.participants-list {
+    list-style: none;
+    padding: 0;
+}
+
+.participants-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dotted var(--color-separador);
+}
+.participants-list li:last-child {
+    border-bottom: none;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-group label {
+    display: inline-block;
+    padding: 3px 6px;
+    border: 1px solid var(--color-separador);
+    border-radius: 3px;
+    font-size: 0.7em;
+    cursor: pointer;
+    background-color: #444;
+}
+
+.checkbox-group input[type="checkbox"]:checked + label {
+    background-color: var(--color-exito);
+    border-color: var(--color-exito);
+    color: black;
+    font-weight: bold;
+}
+
+.eliminar-btn {
+    background-color: var(--color-error);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 3px;
+    margin-left: 10px;
+    font-size: 0.8em;
+}
+
+.cofre-tag {
+    background-color: var(--color-acento-dorado);
+    color: black;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+
+/* ========================================================== */
+/* LOOT Y RESULTADOS */
+/* ========================================================== */
+.loot-entry {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.entrada-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.delete-loot-btn {
+    background-color: var(--color-error);
+    color: white;
+    padding: 3px 7px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+
+.loot-inputs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 0;
+}
+
+.loot-inputs > div {
+    flex: 1;
+}
+
+.results-box {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    min-height: 150px;
+}
+
+.results-box h4 {
+    color: var(--color-acento-dorado);
+    margin-top: 0;
+    border-bottom: 1px solid var(--color-separador);
+    padding-bottom: 5px;
+}
+
+/* ========================================================== */
+/* MODALES */
+/* ========================================================== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: var(--color-fondo-secundario);
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.modal-title {
+    color: var(--color-acento-dorado);
+    border-bottom: 1px solid var(--color-separador);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+.close-btn:hover {
+    color: var(--color-error);
+}
+
+/* Estilo para el textarea de pegado masivo */
+#jugadoresBulk {
+    min-height: 150px;
+    resize: vertical;
+    font-family: monospace;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/* Estilos Específicos para Modal de Ubicación */
+.large-modal {
+    max-width: 800px;
+}
+
+.ubicacion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.ubicacion-form {
+    padding-right: 10px;
+    border-right: 1px solid var(--color-separador);
+}
+
+.ubicacion-list .participants-list li {
+    padding: 5px 0;
+}
+
+.referencia-visual { 
+    text-align: center; 
+    padding: 15px;
+    background-color: #222; 
+    border-radius: 5px;
+    margin-top: 20px;
+}
+.referencia-visual img { 
+    max-width: 100%; 
+    height: auto; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    border: 1px solid var(--color-separador);
+}
+
+
+/* ========================================================== */
+/* MEDIA QUERIES (MODO MÓVIL) */
+/* ========================================================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .header-controls {
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .ubicacion-grid {
+        grid-template-columns: 1fr;
+    }
+    .ubicacion-form {
+        border-right: none;
+        border-bottom: 1px solid var(--color-separador);
+        padding-bottom: 20px;
+        padding-right: 0;
+    }
+    .large-modal {
+        width: 95%;
+        margin: 5% auto;
+    }
+}

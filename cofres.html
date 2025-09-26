@@ -1,0 +1,29 @@
+<span class="close-btn" onclick="document.getElementById('cofresModal').style.display='none'" style="position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: var(--color-error);">&times;</span>
+
+<h3>Registro de Ubicación de Cofres</h3>
+<p>Asigna o actualiza el número de cofre (1-70) de cada jugador.</p>
+
+<div class="cofre-form">
+    <label for="jugadorCofre">Jugador:</label>
+    <input type="text" id="jugadorCofre" list="lista-jugadores-cofre">
+    <datalist id="lista-jugadores-cofre"></datalist>
+
+    <label for="numeroCofre">Número de Cofre (1-70):</label>
+    <input type="number" id="numeroCofre" min="1" max="70" placeholder="Ej: 35">
+    
+    <button onclick="agregarUbicacionCofre()">Guardar Ubicación</button>
+    <input type="text" id="filtroJugador" oninput="mostrarUbicacionesCofre()" placeholder="Filtrar por nombre o número de cofre...">
+</div>
+
+<hr>
+
+<div class="cofre-visual-reference">
+    <h4>Referencia Visual de Ubicación</h4>
+    <img id="referencia-cofres-img" src="distribucion_cofres.jpg" alt="Distribución de cofres de gremio numerados" style="width: 100%; max-width: 450px; border-radius: 8px; border: 2px solid var(--color-acento-dorado);">
+</div>
+
+<hr>
+
+<h4>Ubicaciones Registradas</h4>
+<ul id="ubicaciones-list">
+    </ul>

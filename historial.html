@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Reportes - Hiyoko</title>
+    <style>
+        /* --- ESTILOS COMPARTIDOS (COPIAR DE index.html) --- */
+        :root {
+            --color-texto: #e0e0e0;
+            --color-fondo: #1e1e1e;
+            --color-fondo-secundario: #2a2a2a;
+            --color-separador: #444;
+            --color-exito: #4CAF50;
+            --color-error: #F44336;
+            --color-info: #2196F3;
+            --color-cofre: #795548;
+            --color-acento-dorado: #FFC107;
+            --color-alerta: #FF9800; 
+            --color-pendiente: #9E9E9E; 
+        }
+        body { 
+            background-color: var(--color-fondo); 
+            color: var(--color-texto); 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        h1, h2, h3 { 
+            color: var(--color-acento-dorado);
+            text-align: center;
+        }
+        hr { border: 0; border-top: 1px solid var(--color-separador); margin: 20px 0; }
+        button { 
+            background-color: var(--color-info); 
+            color: white; 
+            border: none; 
+            padding: 7px 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+        }
+        button:hover { background-color: #1976D2; }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+
+        /* --- ESTILOS ESPECÍFICOS DEL HISTORIAL --- */
+        #historialContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding-top: 20px;
+        }
+
+        .report-card {
+            background-color: var(--color-fondo-secundario);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            position: relative;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .report-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #3a3a3a;
+            padding-bottom: 5px;
+        }
+        .card-header h3 {
+            color: var(--color-texto);
+            font-size: 1.1em;
+            margin: 0;
+            text-align: left;
+            flex-grow: 1;
+        }
+        .card-header span {
+            font-size: 0.7em;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        .card-body p {
+            font-size: 0.9em;
+            margin: 4px 0;
+        }
+        .card-body strong {
+            color: var(--color-acento-dorado);
+        }
+        .loot-summary {
+            background-color: #333;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .loot-summary p {
+            font-size: 0.85em;
+            margin: 2px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .reparacion-tag {
+            font-size: 0.75em;
+            background-color: var(--color-error);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .participants-list {
+            margin-top: 10px;
+            max-height: 150px; 
+            overflow-y: auto; 
+            padding-right: 5px;
+        }
+        .participants-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.8em;
+        }
+        .participants-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+            border-bottom: 1px dotted #444;
+        }
+
+        /* Nuevos Estilos de Botones */
+        .action-group {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .action-group button {
+            flex: 1;
+            font-size: 0.8em;
+        }
+        .btn-view {
+             background-color: var(--color-info);
+        }
+        .btn-copy {
+             background-color: #5865F2; /* Azul de Discord */
+        }
+        
+        .clear-button {
+            margin-top: 20px;
+            background-color: var(--color-error);
+            width: 100%;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 650px) {
+            #historialContainer {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* MODAL para el reporte completo */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8); 
+        }
+        .modal-content {
+            background-color: var(--color-fondo-secundario);
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 700px; 
+            border-radius: 8px;
+            position: relative;
+        }
+        .close {
+            color: var(--color-error);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+        #reporteCompletoContent {
+            white-space: pre-wrap; /* Respeta los saltos de línea y espacios */
+            font-family: monospace;
+            background-color: #111;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 70vh;
+            overflow-y: auto;
+            font-size: 0.9em;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📜 Historial de Repartos de Loot</h1>
+        <p style="text-align: center; color: #aaa;">Aquí se guardan todos los reportes generados. Usa los botones de acción debajo de cada tarjeta.</p>
+        <hr>
+
+        <div id="historialContainer">
+            <p style="text-align: center; grid-column: 1 / -1;" id="noReportsMessage">No hay reportes guardados.</p>
+        </div>
+
+        <button onclick="confirmarBorrarHistorial()" class="clear-button">🗑️ Borrar todo el Historial</button>
+    </div>
+
+    <div id="reporteModal" class="modal" onclick="if(event.target.id === 'reporteModal') closeReporteModal()">
+        <div class="modal-content">
+            <span class="close" onclick="closeReporteModal()">&times;</span>
+            <h2>Reporte Estático Completo</h2>
+            <div id="reporteCompletoContent">
+                </div>
+        </div>
+    </div>
+
+    <script src="historial.js"></script>
+</body>
+</html>
